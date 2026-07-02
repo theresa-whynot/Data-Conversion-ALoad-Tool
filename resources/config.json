@@ -1,0 +1,481 @@
+{
+    "shared_config": {
+        "client_id": "1130e097-8538-4054-8803-0331fe3909eb",
+        "tenant_id": "468e107f-7c8b-4418-a7d5-c3f79f4b55a0",
+        "site_url": "https://avaapcorp.sharepoint.com/sites/DataConversionTeam",
+        "cert_path": "C:/Users/TheresaReinhard/avaap.pfx",
+        "cert_password": "Tenis23tr234!",
+        "thumbprint": "71073309C0164EF2CA7602867276F96A37D1BA0F",
+        "common_crosswalk_sharepoint_list": "DBCommonXwalk",
+        "pre_validation_sharepoint_list": "DBPreValidation"
+    },
+    "projects": {
+        "LS1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "BitcoinRules23!!",
+                "url": "https://impl.wd12.myworkday.com/cityofls1/d/home.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "cityofls1",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "LS4": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "BitcoinRules23!!",
+                "url": "https://impl.wd12.myworkday.com/cityofls4/d/home.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "cityofls4",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PO1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz1/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz1",
+                "build": "FINS_Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PO4": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz4/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz4",
+                "build": "FINS_TEST"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MC2": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "AvaapWorkday123!!",
+                "url": "https://impl.wd501.myworkday.com/monroecounty2/d/home.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty2",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MC4": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "AvaapWorkday123!!",
+                "url": "https://impl.wd501.myworkday.com/monroecounty4/d/home.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty4",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MC3": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap1234!",
+                "url": "https://impl.wd501.myworkday.com/monroecounty3/d/home.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty3",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MC6": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!!123!!",
+                "url": "https://impl.wd501.myworkday.com/monroecounty6/d/home.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty6",
+                "build": "Parallel3"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MCGOLD": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!!123",
+                "url": "https://impl.wd501.myworkday.com/wday/authgwy/monroecounty_gold/login.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty_gold",
+                "build": "GOLD"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "MCSBX": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!!123",
+                "url": "https://impl.wd501.myworkday.com/monroecounty/d/home.htmld",
+                "workday_data_center": "wd501",
+                "tenant_name": "monroecounty",
+                "build": "SBX"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PCOM1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!234!!",
+                "url": "https://impl.wd108.myworkday.com/pcom1/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "pcom1",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PCOM3": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!234!!",
+                "url": "https://impl.wd108.myworkday.com/pcom3/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "pcom3",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PCOMGOLD": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap!234!!!",
+                "url": "https://impl.wd108.myworkday.com/pcom_gold/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "pcom_gold",
+                "build": "GOLD"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "HP3": {
+            "hr_system": {
+                "username": "ISU-Alteryx",
+                "password": "AvaapAlteryx!2345",
+                "url": "https://impl.wd12.myworkday.com/wday/authgwy/highpointnc3/login.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "highpointnc3",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "UGAF1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday1234!",
+                "url": "https://impl.wd108.myworkday.com/wday/authgwy/ugafoundation1/login.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "ugafoundation1",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "UGAFGOLD": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap1234!!",
+                "url": "https://impl.wd108.myworkday.com/ugafoundation_gold/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "ugafoundation_gold",
+                "build": "Gold"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "UGAF3": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Avaap1234!!",
+                "url": "https://impl.wd108.myworkday.com/wday/authgwy/ugafoundation3/login.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "ugafoundation3",
+                "build": "E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "LSGOLD": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "AvaapRules23!!",
+                "url": "https://impl.wd12.myworkday.com/wday/authgwy/cityofls_gold/login.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "cityofls_gold",
+                "build": "Gold"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "LSSBX": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "AvaapRules23!!",
+                "url": "https://impl.wd12.myworkday.com/wday/authgwy/cityofls/login.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "cityofls",
+                "build": "SBX"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "LSProd": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "AvaapRules23!!",
+                "url": "https://wd12.myworkday.com/wday/authgwy/cityofls/login.htmld",
+                "workday_data_center": "wd12",
+                "tenant_name": "cityofls",
+                "build": "Prod"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PO3": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz3/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz3",
+                "build": "FINS_E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PO5": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz5/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz5",
+                "build": "HCM_Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "POSBX": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Monday2026!",
+                "url": "https://impl-identity.wd108.myworkday.com/wday/authgwy/peoriaaz/upc/login",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz",
+                "build": "HCM_SBXn"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "PO7": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz7/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz7",
+                "build": "HCM_E2E"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+
+        "POGold": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday2025!!",
+                "url": "https://impl.wd108.myworkday.com/peoriaaz_gold/d/home.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "peoriaaz_gold",
+                "build": "FIN_Gold"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "NKU1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "DelilahRules234!!",
+                "url": "https://impl.wd108.myworkday.com/wday/authgwy/nku1/login.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "nku1",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "NKU6": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "DelilahRules234!!",
+                "url": "https://impl.wd108.myworkday.com/wday/authgwy/nku6/login.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "nku6",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "NKU7": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Welcome000!",
+                "url": "https://impl.wd108.myworkday.com/wday/authgwy/nku7/login.htmld",
+                "workday_data_center": "wd108",
+                "tenant_name": "nku7",
+                "build": "Parallel"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "NKUGOLD": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Welcome000!",
+                "url": "https://impl-identity.wd108.myworkday.com/wday/authgwy/nku_gold/upc/login",
+                "workday_data_center": "wd108",
+                "tenant_name": "nku_gold",
+                "build": "Gold"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "NKUSBX": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Welcome000!",
+                "url": "https://impl-identity.wd108.myworkday.com/wday/authgwy/nku/upc/login",
+                "workday_data_center": "wd108",
+                "tenant_name": "nku",
+                "build": "SBX"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        },
+        "DPT1": {
+            "hr_system": {
+                "username": "twhynot-impl",
+                "password": "Workday@2025!!!",
+                "url": "https://impl.workday.com/navmp_dpt1/d/home.htmld",
+                "workday_data_center": "wd2",
+                "tenant_name": "navmp_dpt1",
+                "build": "Foundation"
+            },
+            "smartsheet": {
+                "access_token": "7MJgMddG8vU26daemCCybVnWOwipAWUhDUc7X",
+                "client_issue_log_sheet_id": "5634155270328196",
+                "workday_pre_validations_issue_sheet_id":"5008827648790404"
+            }
+        }
+    }
+}
+
