@@ -167,8 +167,20 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     }
     
  
+    def is_blank(value):
+        """True for empty source cells (None/NaN/whitespace), which should not be stacked."""
+        if value is None:
+            return True
+        try:
+            if pd.isna(value):
+                return True
+        except (TypeError, ValueError):
+            pass
+        text = str(value).strip()
+        return text == "" or text.lower() == "nan"
+
     def write_as_text(ws, cell_ref, value, target_col=None):
-        if pd.isna(value) or value in ["", " "]:
+        if is_blank(value):
             return
 
         if target_col in DATE_COLUMNS:
@@ -184,17 +196,27 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     current_row = start_row  # Track where to write
 
     for row_index, row_data in enumerate(source_data.itertuples(index=False), start=start_row):
-        max_stack_length = 1  # Default to 1 unless stacking is detected
-
-        # Determine if stacking is needed
+        # For stack mappings, keep only non-blank source values (skip empty Usage/Address slots)
+        stack_values_by_target = {}
         for mapping in column_map_list:
             source_col, target_col, mapping_type = (
                 mapping if isinstance(mapping, tuple) and len(mapping) == 3 else (*mapping, "default")
             )
 
             if isinstance(source_col, tuple) and mapping_type == "stack":
-                valid_values = [getattr(row_data, col) for col in source_col if getattr(row_data, col) not in [None, "", " "]]
-                max_stack_length = max(max_stack_length, len(valid_values))  # Determine max stack depth
+                stack_values_by_target[target_col] = [
+                    getattr(row_data, col)
+                    for col in source_col
+                    if not is_blank(getattr(row_data, col))
+                ]
+
+        if stack_values_by_target:
+            max_stack_length = max(
+                (len(values) for values in stack_values_by_target.values()),
+                default=0,
+            )
+        else:
+            max_stack_length = 1  # No stacking on this sheet
 
         # Write data (concatenation, stacking, or standard mapping)
         for stack_index in range(max_stack_length):
@@ -209,7 +231,7 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
                     if mapping_type == "concat":
                         # Concatenate all values into one string
                         concat_value = " - ".join(
-                            str(getattr(row_data, col)) if getattr(row_data, col) not in [None, "", " "] else ""
+                            str(getattr(row_data, col)) if not is_blank(getattr(row_data, col)) else ""
                             for col in source_col
                         ).strip(" - ")
 
@@ -222,16 +244,14 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
                             )
                             row_written = True
 
-                    elif mapping_type == "stack" and stack_index < len(source_col):
-                        # Stacking: write each value separately in a new row
-                        col = source_col[stack_index]
-                        value = getattr(row_data, col)
-
-                        if value not in [None, "", " "]:
+                    elif mapping_type == "stack":
+                        # Stack only non-blank values into consecutive target rows
+                        values = stack_values_by_target.get(target_col, [])
+                        if stack_index < len(values):
                             write_as_text(
                                 target_ws,
                                 f"{target_column_letters[target_col]}{current_row}",
-                                value,
+                                values[stack_index],
                                 target_col
                             )
                             row_written = True
@@ -239,7 +259,7 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
                 else:  # Default one-to-one mapping
                     if source_col in source_data.columns and target_col in target_column_letters:
                         value = getattr(row_data, source_col)
-                        if value not in [None, "", " "]:
+                        if not is_blank(value):
                             write_as_text(
                                 target_ws,
                                 f"{target_column_letters[target_col]}{current_row}",
