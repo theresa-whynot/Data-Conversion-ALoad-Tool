@@ -24,8 +24,8 @@ sheet_column_map = {
     "Grid-10": [
         ("Supplier_ID", "Supplier Key"),
         ("Email_ID", "Email Address Data Key"),
-        (("Usage_1", "Usage_2", "Usage_3"), "Use For Reference Key", "stack"),
-        (("Usage_1", "Usage_2", "Usage_3"), "ID", "stack"),
+        (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "Use For Reference Key", "stack"),
+        (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "ID", "stack"),
     ],
 }
 # Define filters and subfilters for each sheet
