@@ -177,8 +177,15 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
                 ws[cell_ref] = parsed_date.strftime("%Y-%m-%d")
                 return
 
+        # Convert exact Yes/No source values to 1/0 for the target sheet
+        text_value = str(value)
+        if text_value == "Yes":
+            text_value = "1"
+        elif text_value == "No":
+            text_value = "0"
+
         ws[cell_ref].number_format = "@"
-        ws[cell_ref] = str(value)
+        ws[cell_ref] = text_value
 
 
     current_row = start_row  # Track where to write
