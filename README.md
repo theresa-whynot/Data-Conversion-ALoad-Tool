@@ -20,9 +20,9 @@ streamlit run frontend/main_app.py
 Then:
 
 1. Select an a-load script (for example `SUP02_Supplier_Emails`)
-2. Enter the **source** Excel path
-3. Enter the **target** a-load Excel path
-4. Click **Generate a-load**
+2. Choose the **Client File Spec** (Browse or path)
+3. Choose the **Blank A-Load** (Browse or path)
+4. Click **Generate a-load** for that section, or add more sections and use **Generate all a-loads**
 
 The UI reuses each script's existing sheet mappings, filters, header rows, and
 defaults. Only the file paths are overridden.
