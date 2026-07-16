@@ -69,6 +69,14 @@ def ensure_job_state(job: dict, default_script: str) -> None:
     source_key = f"source_{job_id}"
     target_key = f"target_{job_id}"
 
+    # Apply browse selections before the matching widgets are created.
+    pending_source_key = f"pending_source_{job_id}"
+    pending_target_key = f"pending_target_{job_id}"
+    if pending_source_key in st.session_state:
+        st.session_state[source_key] = st.session_state.pop(pending_source_key)
+    if pending_target_key in st.session_state:
+        st.session_state[target_key] = st.session_state.pop(pending_target_key)
+
     if script_key not in st.session_state:
         st.session_state[script_key] = job.get("script") or default_script
     if source_key not in st.session_state:
@@ -174,7 +182,8 @@ for index, job in enumerate(st.session_state.jobs):
         if st.button("Browse", key=f"browse_source_{job_id}", use_container_width=True):
             path = pick_excel_file("Select Client File Spec")
             if path:
-                st.session_state[f"source_{job_id}"] = path
+                # Defer widget key update until the next run (before text_input exists).
+                st.session_state[f"pending_source_{job_id}"] = path
                 st.rerun()
 
     tgt_col, tgt_btn_col = st.columns([4, 1])
@@ -189,7 +198,7 @@ for index, job in enumerate(st.session_state.jobs):
         if st.button("Browse", key=f"browse_target_{job_id}", use_container_width=True):
             path = pick_excel_file("Select Blank A-Load")
             if path:
-                st.session_state[f"target_{job_id}"] = path
+                st.session_state[f"pending_target_{job_id}"] = path
                 st.rerun()
 
     sync_job_from_widgets(job)
