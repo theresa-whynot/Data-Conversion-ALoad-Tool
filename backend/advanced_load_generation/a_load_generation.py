@@ -179,8 +179,29 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         text = str(value).strip()
         return text == "" or text.lower() == "nan"
 
-    def write_as_text(ws, cell_ref, value, target_col=None):
+    def is_visibility_source(source_col):
+        return isinstance(source_col, str) and source_col.strip().lower() == "visibility"
+
+    def normalize_visibility(value):
+        """
+        Map Visibility source values to target 1/0:
+        - yes / public -> 1
+        - no / private / blank -> 0
+        Matching is case-insensitive.
+        """
         if is_blank(value):
+            return "0"
+        text = str(value).strip().lower()
+        if text in {"yes", "public"}:
+            return "1"
+        if text in {"no", "private"}:
+            return "0"
+        return str(value).strip()
+
+    def write_as_text(ws, cell_ref, value, target_col=None, source_col=None):
+        if is_visibility_source(source_col):
+            value = normalize_visibility(value)
+        elif is_blank(value):
             return
 
         if target_col in DATE_COLUMNS:
@@ -266,12 +287,14 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
                 else:  # Default one-to-one mapping
                     if source_col in source_data.columns and target_col in target_column_letters:
                         value = getattr(row_data, source_col)
-                        if not is_blank(value):
+                        # Visibility blanks still write as 0; other blanks are skipped
+                        if is_visibility_source(source_col) or not is_blank(value):
                             write_as_text(
                                 target_ws,
                                 f"{target_column_letters[target_col]}{current_row}",
                                 value,
-                                target_col
+                                target_col,
+                                source_col=source_col,
                             )
                             row_written = True
 
