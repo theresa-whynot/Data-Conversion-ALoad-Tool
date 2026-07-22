@@ -18,7 +18,7 @@ sheet_column_map = {
         ("Worker_ID", "Worker Reference ID"),
         ("W4_Effective_Date", "Effective as of"),
         ("Company_Reference_ID", "Company Reference ID"),
-        ("Payroll_Maritial_Status_Reference_ID", "Marital Status Reference ID"),
+        ("Payroll_Marital_Status_Reference_ID", "Marital Status Reference ID"),
         ("Number_of_Allowances", "Number of Allowances"),
         ("Additional_Amount", "Additional Amount"),
         ("Multiple_Jobs_or_Spouse_Works", "Multiple Jobs or Spouse Works"),
