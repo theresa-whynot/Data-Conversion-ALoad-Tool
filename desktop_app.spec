@@ -31,7 +31,6 @@ hiddenimports = [
     "numpy",
     "webview",
     "webview.platforms.edgechromium",
-    "webview.platforms.winforms",
     "tkinter",
     "tkinter.filedialog",
     "tkinter.messagebox",

@@ -21,9 +21,6 @@ APP_TITLE = "A-Load Generator"
 DEFAULT_PORT = 8501
 HOST = "127.0.0.1"
 
-# Prefer Edge WebView2. Do not use winforms/pythonnet in packaged builds.
-PREFERRED_GUIS = ("edgechromium", "edgehtml", "mshtml")
-
 
 def app_root() -> Path:
     """Resolve project root for source runs and frozen builds."""
