@@ -1,0 +1,2 @@
+# Extra packages only needed to *build* the Windows desktop .exe
+pyinstaller>=6.0

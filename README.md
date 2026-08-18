@@ -9,15 +9,56 @@ dynamic mapping scripts in `backend/advanced_load_generation/dynamic/`.
 pip install -r requirements.txt
 ```
 
-## Frontend (recommended)
+## Desktop app (recommended)
 
-Start the Streamlit UI:
+### Run from source (no browser / localhost typing)
+
+```bash
+pip install -r requirements.txt
+python desktop_launcher.py
+```
+
+This starts Streamlit in the background and opens the UI in a native desktop window.
+
+### Build a downloadable Windows `.exe`
+
+On a Windows machine with Python installed:
+
+```bat
+build_desktop_app.bat
+```
+
+Or manually:
+
+```bash
+pip install -r requirements.txt -r requirements-desktop.txt
+pyinstaller --noconfirm desktop_app.spec
+```
+
+When the build finishes, share this folder:
+
+```text
+dist/ALoadGenerator/
+```
+
+Users double-click:
+
+```text
+dist/ALoadGenerator/ALoadGenerator.exe
+```
+
+Tip: zip the whole `ALoadGenerator` folder (not just the `.exe`). The onedir build
+needs the files beside the executable.
+
+## Browser mode (optional)
 
 ```bash
 streamlit run frontend/main_app.py
 ```
 
-Then:
+Then open `http://localhost:8501` if it does not open automatically.
+
+## Using the app
 
 1. Select an a-load script (for example `SUP02_Supplier_Emails`)
 2. Choose the **Client File Spec** (Browse or path)
@@ -47,3 +88,5 @@ python backend/advanced_load_generation/dynamic/a_load_generation_SUP02_Supplier
 - **File paths first:** source/target inputs match how the mappings already work.
 - **No database required** for generation. A DB (or simple log) can be added later
   for run history, saved path presets, or SharePoint integration.
+- **Desktop packaging** wraps Streamlit in a native window with `pywebview` and
+  can be frozen with PyInstaller for distribution.
