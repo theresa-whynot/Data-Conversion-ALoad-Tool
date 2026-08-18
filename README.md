@@ -50,6 +50,11 @@ dist/ALoadGenerator/ALoadGenerator.exe
 Tip: zip the whole `ALoadGenerator` folder (not just the `.exe`). The onedir build
 needs the files beside the executable.
 
+If a coworker PC does not have Microsoft Edge WebView2, the app falls back to the
+system browser automatically. To install WebView2 (optional, for the native window):
+
+https://developer.microsoft.com/microsoft-edge/webview2/
+
 ## Browser mode (optional)
 
 ```bash

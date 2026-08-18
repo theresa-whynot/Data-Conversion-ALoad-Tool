@@ -30,11 +30,20 @@ hiddenimports = [
     "openpyxl",
     "numpy",
     "webview",
+    "webview.platforms.edgechromium",
     "tkinter",
     "tkinter.filedialog",
+    "tkinter.messagebox",
 ]
 
 binaries = []
+
+# Avoid pulling pythonnet/clr into the default import path when possible.
+excludes = [
+    "pythonnet",
+    "clr",
+    "clr_loader",
+]
 
 for package in ("streamlit", "altair", "pydeck", "jsonschema", "webview"):
     try:
@@ -61,7 +70,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=excludes,
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
