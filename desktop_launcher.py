@@ -1,8 +1,8 @@
 """
 Desktop launcher for the A-Load Generator.
 
-Starts Streamlit headlessly and opens the UI in a native pywebview window
-so users do not need to run Git Bash or open localhost manually.
+Starts Streamlit headlessly and opens the UI in a native window when possible.
+Avoids the WinForms/pythonnet backend that breaks in frozen Windows builds.
 """
 
 from __future__ import annotations
@@ -13,12 +13,16 @@ import socket
 import subprocess
 import sys
 import time
+import webbrowser
 from pathlib import Path
 
 
 APP_TITLE = "A-Load Generator"
 DEFAULT_PORT = 8501
 HOST = "127.0.0.1"
+
+# Prefer Edge WebView2. Do not use winforms/pythonnet in packaged builds.
+PREFERRED_GUIS = ("edgechromium", "edgehtml", "mshtml")
 
 
 def app_root() -> Path:
@@ -135,24 +139,84 @@ def stop_process(proc: subprocess.Popen | None) -> None:
         proc.kill()
 
 
-def launch_desktop_window(port: int) -> None:
+def show_error(message: str) -> None:
+    """Show a visible error even in windowed/.exe builds."""
     try:
-        import webview
-    except ImportError as exc:
-        raise ImportError(
-            "pywebview is required for desktop mode. "
-            "Install with: pip install pywebview"
-        ) from exc
+        import tkinter as tk
+        from tkinter import messagebox
+
+        root = tk.Tk()
+        root.withdraw()
+        messagebox.showerror(APP_TITLE, message)
+        root.destroy()
+    except Exception:
+        print(message, file=sys.stderr)
+
+
+def launch_browser_fallback(port: int) -> None:
+    """
+    Open the system browser and keep a small control window open.
+
+    Used when native webview backends are unavailable on the machine.
+    """
+    import tkinter as tk
 
     url = f"http://{HOST}:{port}"
-    webview.create_window(
-        APP_TITLE,
-        url=url,
-        width=1200,
-        height=900,
-        min_size=(900, 700),
+    webbrowser.open(url)
+
+    root = tk.Tk()
+    root.title(APP_TITLE)
+    root.geometry("420x160")
+    root.resizable(False, False)
+
+    label = tk.Label(
+        root,
+        text=(
+            f"{APP_TITLE} is running.\n\n"
+            f"Opened in your browser:\n{url}\n\n"
+            "Close this window to quit the app."
+        ),
+        justify="left",
+        padx=16,
+        pady=16,
     )
-    webview.start()
+    label.pack(fill="both", expand=True)
+
+    button = tk.Button(root, text="Quit", width=12, command=root.destroy)
+    button.pack(pady=(0, 16))
+
+    root.mainloop()
+
+
+def launch_desktop_window(port: int) -> None:
+    """
+    Open a native desktop window when possible.
+
+    On Windows packaged builds, force Edge WebView2 and avoid the default
+    WinForms/pythonnet backend that fails in frozen apps.
+    """
+    url = f"http://{HOST}:{port}"
+
+    # Force Edge WebView2 before importing webview (avoids winforms/clr).
+    if os.name == "nt":
+        os.environ["PYWEBVIEW_GUI"] = "edgechromium"
+
+    try:
+        import webview
+
+        webview.create_window(
+            APP_TITLE,
+            url=url,
+            width=1200,
+            height=900,
+            min_size=(900, 700),
+        )
+        # Explicit gui= keeps packaged Windows builds off WinForms/pythonnet.
+        webview.start(gui="edgechromium" if os.name == "nt" else None)
+        return
+    except Exception:
+        # Coworker machines without a working WebView2 backend still get the app.
+        launch_browser_fallback(port)
 
 
 def main() -> int:
@@ -169,16 +233,20 @@ def main() -> int:
         run_streamlit_server(script, port)
         return 0
 
-    script_path = main_app_path()
-    port = find_free_port(DEFAULT_PORT)
-    proc = start_streamlit_process(script_path, port)
-    atexit.register(stop_process, proc)
-
+    proc = None
     try:
+        script_path = main_app_path()
+        port = find_free_port(DEFAULT_PORT)
+        proc = start_streamlit_process(script_path, port)
+        atexit.register(stop_process, proc)
+
         wait_for_server(port)
         launch_desktop_window(port)
     except KeyboardInterrupt:
         pass
+    except Exception as exc:  # noqa: BLE001
+        show_error(f"{APP_TITLE} failed to start:\n\n{exc}")
+        return 1
     finally:
         stop_process(proc)
     return 0
