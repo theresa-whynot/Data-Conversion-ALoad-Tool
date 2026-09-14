@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
@@ -182,6 +184,21 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     def is_visibility_source(source_col):
         return isinstance(source_col, str) and source_col.strip().lower() == "visibility"
 
+    def is_national_id_source(source_col):
+        """National ID / tax ID source fields that should lose special characters."""
+        if not isinstance(source_col, str):
+            return False
+        return source_col.strip().lower() in {"national_id", "trust_tax_id"}
+
+    def normalize_national_id(value):
+        """
+        Strip special characters (dashes, spaces, etc.) down to digit-only text.
+        Example: 123-45-6789 -> 123456789
+        """
+        if is_blank(value):
+            return value
+        return re.sub(r"\D", "", str(value).strip())
+
     def normalize_visibility(value):
         """
         Map Visibility source values to target 1/0:
@@ -201,6 +218,10 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     def write_as_text(ws, cell_ref, value, target_col=None, source_col=None):
         if is_visibility_source(source_col):
             value = normalize_visibility(value)
+        elif is_national_id_source(source_col):
+            value = normalize_national_id(value)
+            if is_blank(value):
+                return
         elif is_blank(value):
             return
 
