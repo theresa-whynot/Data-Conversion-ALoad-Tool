@@ -158,10 +158,11 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         "Additional_Jobs_Start_Date",
         "W4_Effective_Date",
         "Most_Recent_Enrollment_Date",
-        "Original_Coverage_Begin_Date"
+        "Original_Coverage_Begin_Date",
         "Availability_Date",
         "Earliest_Hire_Date",
         "Compensation_Effective_Date",
+        "Date_of_Birth",
         "Effective as of",
         "Effective Date"
     }
