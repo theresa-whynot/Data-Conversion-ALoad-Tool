@@ -14,20 +14,51 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\catch-up
 sheet_column_map = {
     "Applicant": [
         ("Worker_ID", "Applicant Key"),
-        ("Worker_ID", "Applicant ID"),
+        ("Applicant_ID_Value", "Applicant ID"),
         ("Country_Reference_ID", "Legal Name Data - Name Detail Data - Country Reference ID"),
         ("Legal_Prefix_Reference_ID", "Legal Name Data - Name Detail Data - Prefix Data - Title Reference ID"),
         ("Legal_First_Name", "Legal Name Data - Name Detail Data - First Name"),
         ("Legal_Middle_Name", "Legal Name Data - Name Detail Data - Middle Name"),
         ("Legal_Last_Name", "Legal Name Data - Name Detail Data - Last Name"),
         ("Legal_Suffix_Reference_ID", "Legal Name Data - Name Detail Data - Suffix Data - Social Suffix Reference ID"),
-        ("Country_Reference_ID", "Preferred Name Data - Name Detail Data - Country Reference ID"),
+        # Preferred country is only populated when preferred-name defaults are triggered
+        ("Preferred_Country_Reference_ID", "Preferred Name Data - Name Detail Data - Country Reference ID"),
         ("Preferred_Prefix_Reference_ID", "Preferred Name Data - Name Detail Data - Prefix Data - Title Reference ID"),
         ("Preferred_First_Name", "Preferred Name Data - Name Detail Data - First Name"),
         ("Preferred_Middle_Name", "Preferred Name Data - Name Detail Data - Middle Name"),
         ("Preferred_Last_Name", "Preferred Name Data - Name Detail Data - Last Name"),
         ("Preferred_Suffix_Reference_ID", "Preferred Name Data - Name Detail Data - Suffix Data - Social Suffix Reference ID"),
     ],
+}
+
+# Prefix Applicant ID with A_ while leaving Applicant Key as the raw Worker_ID
+source_derived_columns = {
+    "Applicant": [
+        {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"},
+    ],
+}
+
+# If any preferred-name source field is populated, fill remaining blank preferred
+# fields from the corresponding legal-name values. If none are populated, leave
+# all preferred-name columns blank.
+source_default_rules = {
+    "Applicant": {
+        "trigger_columns": [
+            "Preferred_Prefix_Reference_ID",
+            "Preferred_First_Name",
+            "Preferred_Middle_Name",
+            "Preferred_Last_Name",
+            "Preferred_Suffix_Reference_ID",
+        ],
+        "fill_map": {
+            "Preferred_Country_Reference_ID": "Country_Reference_ID",
+            "Preferred_Prefix_Reference_ID": "Legal_Prefix_Reference_ID",
+            "Preferred_First_Name": "Legal_First_Name",
+            "Preferred_Middle_Name": "Legal_Middle_Name",
+            "Preferred_Last_Name": "Legal_Last_Name",
+            "Preferred_Suffix_Reference_ID": "Legal_Suffix_Reference_ID",
+        },
+    },
 }
 
 # Define filters and subfilters for each sheet
@@ -53,4 +84,13 @@ default_columns = {
 }
 
 # Run the data transfer with filtering and default columns
-transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns)
+transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_default_rules=source_default_rules,
+    source_derived_columns=source_derived_columns,
+)
