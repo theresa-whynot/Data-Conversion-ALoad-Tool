@@ -2,7 +2,82 @@ import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
 
-def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns):
+
+def is_blank(value):
+    """True for empty source cells (None/NaN/whitespace)."""
+    if value is None:
+        return True
+    try:
+        if pd.isna(value):
+            return True
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    return text == "" or text.lower() == "nan"
+
+
+def apply_conditional_source_defaults(source_data, rules):
+    """
+    If any trigger column is populated on a row, fill blank destination
+    columns from their fallback source columns. If no trigger column is
+    populated, clear all destination columns in the fill map.
+
+    rules = {
+        "trigger_columns": ["Preferred_First_Name", ...],
+        "fill_map": {
+            "Preferred_First_Name": "Legal_First_Name",
+            "Preferred_Country_Reference_ID": "Country_Reference_ID",
+            ...
+        },
+    }
+    """
+    if not rules:
+        return source_data
+
+    df = source_data.copy()
+    trigger_columns = [
+        col for col in rules.get("trigger_columns", []) if col in df.columns
+    ]
+    fill_map = rules.get("fill_map", {})
+
+    # Ensure destination columns exist so mappings can reference them.
+    for dest_col in fill_map:
+        if dest_col not in df.columns:
+            df[dest_col] = None
+
+    if not trigger_columns:
+        for dest_col in fill_map:
+            df[dest_col] = None
+        return df
+
+    def row_has_trigger(row):
+        return any(not is_blank(row[col]) for col in trigger_columns)
+
+    has_trigger = df.apply(row_has_trigger, axis=1)
+
+    for dest_col, fallback_col in fill_map.items():
+        if fallback_col not in df.columns:
+            # No fallback available: clear when not triggered, keep existing when triggered.
+            df.loc[~has_trigger, dest_col] = None
+            continue
+
+        # When triggered and dest is blank, copy fallback. When not triggered, clear dest.
+        needs_fill = has_trigger & df[dest_col].map(is_blank)
+        df.loc[needs_fill, dest_col] = df.loc[needs_fill, fallback_col]
+        df.loc[~has_trigger, dest_col] = None
+
+    return df
+
+
+def transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_default_rules=None,
+):
     """
     Transfers specified columns from a source Excel file to specified sheets and columns in a target Excel file,
     with support for unique filters per sheet. Allows population of default columns with conditions.
@@ -16,6 +91,8 @@ def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, fi
     - header_rows: A dictionary where the key is a sheet name and the value is the header row number.
     - default_columns: A dictionary where the key is a sheet name and the value is a list of tuples 
                         mapping target columns to default values and any conditions for applying them.
+    - source_default_rules: Optional dict keyed by sheet name. When any trigger column is populated,
+                        blank destination fields are filled from mapped fallback source columns.
     """
     
     # Load the source data
@@ -41,6 +118,12 @@ def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, fi
             sheet_data = apply_filters(source_data.copy(), filters[sheet_name])
         else:
             sheet_data = source_data.copy()  # No filters, use all data
+
+        # Optionally backfill blank source fields from fallback columns
+        if source_default_rules and sheet_name in source_default_rules:
+            sheet_data = apply_conditional_source_defaults(
+                sheet_data, source_default_rules[sheet_name]
+            )
 
         # Define the start row for data writing
         start_row = header_row + 1
