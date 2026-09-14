@@ -185,10 +185,8 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         return isinstance(source_col, str) and source_col.strip().lower() == "visibility"
 
     def is_national_id_source(source_col):
-        """National ID / tax ID source fields that should lose special characters."""
-        if not isinstance(source_col, str):
-            return False
-        return source_col.strip().lower() in {"national_id", "trust_tax_id"}
+        """National ID source fields that should lose special characters."""
+        return isinstance(source_col, str) and source_col.strip().lower() == "national_id"
 
     def normalize_national_id(value):
         """
