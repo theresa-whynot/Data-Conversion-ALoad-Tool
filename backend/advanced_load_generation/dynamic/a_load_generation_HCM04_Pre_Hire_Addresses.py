@@ -14,7 +14,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\catch-up
 sheet_column_map = {
     "Applicant - Address Data": [
         ("Worker_ID", "Applicant Key"),
-        ("Address_Line_1", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Country_Reference_ID", "Country Reference ID"),
         ("Municipality", "Municipality"),
         ("Country_Region_Reference_ID", "Country Region Reference ID"),
@@ -25,13 +25,13 @@ sheet_column_map = {
     ],
     "Grid-8": [
         ("Worker_ID", "Applicant Key"),
-        ("Address_Line_1", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data Key", "stack"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data", "stack"),
     ],
     "Grid-11": [
         ("Worker_ID", "Applicant Key"),
-        ("Address_Line_1", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Communication_Usage_Reference_ID","Use For Reference Key"),
         ("Communication_Usage_Reference_ID","ID"),
     ],

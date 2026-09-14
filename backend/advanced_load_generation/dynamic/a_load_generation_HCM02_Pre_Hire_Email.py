@@ -15,7 +15,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\catch-up
 sheet_column_map = {
     "Applicant - Email Address Data": [
         ("Worker_ID", "Applicant Key"),
-        ("Email_Address", "Email Address Data Key"),
+        ("Source_Row_Number", "Email Address Data Key"),
         ("Email_Address", "Email Address"),
         ("Visibility", "Public"),
         ("Primary", "Primary"),

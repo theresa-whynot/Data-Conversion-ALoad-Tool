@@ -2,6 +2,11 @@ import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
 
+# Stable 1-based row number from the client source file order.
+# Survives sheet filters so Data Keys stay aligned across tabs.
+SOURCE_ROW_NUMBER_COLUMN = "Source_Row_Number"
+
+
 def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns):
     """
     Transfers specified columns from a source Excel file to specified sheets and columns in a target Excel file,
@@ -20,6 +25,11 @@ def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, fi
     
     # Load the source data
     source_data = pd.read_excel(source_file, dtype=str)
+    # Preserve original client-file row order for Data Keys across filtered sheets
+    source_data = source_data.copy()
+    source_data[SOURCE_ROW_NUMBER_COLUMN] = [
+        str(i) for i in range(1, len(source_data) + 1)
+    ]
     
     # Load the target workbook
     target_wb = load_workbook(target_file)
