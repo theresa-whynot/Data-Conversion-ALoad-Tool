@@ -1,3 +1,5 @@
+import re
+
 import pandas as pd
 from openpyxl import load_workbook
 import numpy as np
@@ -107,6 +109,12 @@ def transfer_data_multiple_sheets(
     source_default_rules=None,
     source_derived_columns=None,
 ):
+# Stable 1-based row number from the client source file order.
+# Survives sheet filters so Data Keys stay aligned across tabs.
+SOURCE_ROW_NUMBER_COLUMN = "Source_Row_Number"
+
+
+def transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns):
     """
     Transfers specified columns from a source Excel file to specified sheets and columns in a target Excel file,
     with support for unique filters per sheet. Allows population of default columns with conditions.
@@ -128,6 +136,11 @@ def transfer_data_multiple_sheets(
     
     # Load the source data
     source_data = pd.read_excel(source_file, dtype=str)
+    # Preserve original client-file row order for Data Keys across filtered sheets
+    source_data = source_data.copy()
+    source_data[SOURCE_ROW_NUMBER_COLUMN] = [
+        str(i) for i in range(1, len(source_data) + 1)
+    ]
     
     # Load the target workbook
     target_wb = load_workbook(target_file)
@@ -278,10 +291,11 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         "Additional_Jobs_Start_Date",
         "W4_Effective_Date",
         "Most_Recent_Enrollment_Date",
-        "Original_Coverage_Begin_Date"
+        "Original_Coverage_Begin_Date",
         "Availability_Date",
         "Earliest_Hire_Date",
         "Compensation_Effective_Date",
+        "Date_of_Birth",
         "Effective as of",
         "Effective Date"
     }
@@ -302,6 +316,19 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     def is_visibility_source(source_col):
         return isinstance(source_col, str) and source_col.strip().lower() == "visibility"
 
+    def is_national_id_source(source_col):
+        """National ID source fields that should lose special characters."""
+        return isinstance(source_col, str) and source_col.strip().lower() == "national_id"
+
+    def normalize_national_id(value):
+        """
+        Strip special characters (dashes, spaces, etc.) down to digit-only text.
+        Example: 123-45-6789 -> 123456789
+        """
+        if is_blank(value):
+            return value
+        return re.sub(r"\D", "", str(value).strip())
+
     def normalize_visibility(value):
         """
         Map Visibility source values to target 1/0:
@@ -321,6 +348,10 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
     def write_as_text(ws, cell_ref, value, target_col=None, source_col=None):
         if is_visibility_source(source_col):
             value = normalize_visibility(value)
+        elif is_national_id_source(source_col):
+            value = normalize_national_id(value)
+            if is_blank(value):
+                return
         elif is_blank(value):
             return
 
@@ -345,22 +376,23 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
 
     for row_index, row_data in enumerate(source_data.itertuples(index=False), start=start_row):
         # For stack mappings, keep only non-blank source values (skip empty Usage/Address slots)
-        stack_values_by_target = {}
+        # Store (source_column_name, value) so stack_name can write Address_Line_1 / Address_Line_2, etc.
+        stack_pairs_by_target = {}
         for mapping in column_map_list:
             source_col, target_col, mapping_type = (
                 mapping if isinstance(mapping, tuple) and len(mapping) == 3 else (*mapping, "default")
             )
 
-            if isinstance(source_col, tuple) and mapping_type == "stack":
-                stack_values_by_target[target_col] = [
-                    getattr(row_data, col)
+            if isinstance(source_col, tuple) and mapping_type in {"stack", "stack_name"}:
+                stack_pairs_by_target[target_col] = [
+                    (col, getattr(row_data, col))
                     for col in source_col
                     if not is_blank(getattr(row_data, col))
                 ]
 
-        if stack_values_by_target:
+        if stack_pairs_by_target:
             max_stack_length = max(
-                (len(values) for values in stack_values_by_target.values()),
+                (len(pairs) for pairs in stack_pairs_by_target.values()),
                 default=0,
             )
         else:
@@ -394,12 +426,24 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
 
                     elif mapping_type == "stack":
                         # Stack only non-blank values into consecutive target rows
-                        values = stack_values_by_target.get(target_col, [])
-                        if stack_index < len(values):
+                        pairs = stack_pairs_by_target.get(target_col, [])
+                        if stack_index < len(pairs):
                             write_as_text(
                                 target_ws,
                                 f"{target_column_letters[target_col]}{current_row}",
-                                values[stack_index],
+                                pairs[stack_index][1],
+                                target_col
+                            )
+                            row_written = True
+
+                    elif mapping_type == "stack_name":
+                        # Write the source column name for each non-blank stacked value
+                        pairs = stack_pairs_by_target.get(target_col, [])
+                        if stack_index < len(pairs):
+                            write_as_text(
+                                target_ws,
+                                f"{target_column_letters[target_col]}{current_row}",
+                                pairs[stack_index][0],
                                 target_col
                             )
                             row_written = True

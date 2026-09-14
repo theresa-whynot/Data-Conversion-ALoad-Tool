@@ -15,7 +15,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\catch-up
 sheet_column_map = {
     "Applicant - Phone Data": [
         ("Worker_ID", "Applicant Key"),
-        ("Phone_Number", "Phone Data Key"),
+        ("Source_Row_Number", "Phone Data Key"),
         ("Country_Reference_ID", "Country ISO Code"),
         ("Phone_Number", "Phone Number"),
         ("Phone_Extension", "Phone Extension"),
