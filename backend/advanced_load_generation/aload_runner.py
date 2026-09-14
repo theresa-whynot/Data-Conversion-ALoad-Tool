@@ -61,6 +61,7 @@ def _load_script_config(script_path: Path) -> dict:
         filters,
         header_rows,
         default_columns,
+        **kwargs,
     ):
         captured["sheet_column_map"] = sheet_column_map
         captured["filters"] = filters
@@ -68,6 +69,8 @@ def _load_script_config(script_path: Path) -> dict:
         captured["default_columns"] = default_columns
         captured["default_source_file"] = source_file
         captured["default_target_file"] = target_file
+        # Optional kwargs used by newer scripts (e.g. HCM01 Pre-Hire Name)
+        captured["transfer_kwargs"] = kwargs
 
     # Patch before the script does `from a_load_generation import transfer_data_multiple_sheets`
     import a_load_generation as alg
@@ -132,6 +135,7 @@ def run_aload(
             config["filters"],
             config["header_rows"],
             config["default_columns"],
+            **config.get("transfer_kwargs", {}),
         )
     return buffer.getvalue().strip()
 
