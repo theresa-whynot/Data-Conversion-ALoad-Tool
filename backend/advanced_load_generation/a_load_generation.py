@@ -69,6 +69,34 @@ def apply_conditional_source_defaults(source_data, rules):
     return df
 
 
+def apply_source_derived_columns(source_data, specs):
+    """
+    Create derived source columns, e.g. prefix Worker_ID into Applicant_ID_Value.
+
+    specs = [
+        {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"},
+        ...
+    ]
+    """
+    if not specs:
+        return source_data
+
+    df = source_data.copy()
+    for spec in specs:
+        source_col = spec.get("source")
+        dest_col = spec.get("dest")
+        prefix = spec.get("prefix", "")
+        if not source_col or not dest_col:
+            continue
+        if source_col not in df.columns:
+            df[dest_col] = None
+            continue
+        df[dest_col] = df[source_col].map(
+            lambda value: None if is_blank(value) else f"{prefix}{value}"
+        )
+    return df
+
+
 def transfer_data_multiple_sheets(
     source_file,
     target_file,
@@ -77,6 +105,7 @@ def transfer_data_multiple_sheets(
     header_rows,
     default_columns,
     source_default_rules=None,
+    source_derived_columns=None,
 ):
     """
     Transfers specified columns from a source Excel file to specified sheets and columns in a target Excel file,
@@ -93,6 +122,8 @@ def transfer_data_multiple_sheets(
                         mapping target columns to default values and any conditions for applying them.
     - source_default_rules: Optional dict keyed by sheet name. When any trigger column is populated,
                         blank destination fields are filled from mapped fallback source columns.
+    - source_derived_columns: Optional dict keyed by sheet name. Creates derived source columns
+                        (for example prefixing Worker_ID with A_ for Applicant ID).
     """
     
     # Load the source data
@@ -123,6 +154,12 @@ def transfer_data_multiple_sheets(
         if source_default_rules and sheet_name in source_default_rules:
             sheet_data = apply_conditional_source_defaults(
                 sheet_data, source_default_rules[sheet_name]
+            )
+
+        # Optionally create derived source columns (prefixes, etc.)
+        if source_derived_columns and sheet_name in source_derived_columns:
+            sheet_data = apply_source_derived_columns(
+                sheet_data, source_derived_columns[sheet_name]
             )
 
         # Define the start row for data writing

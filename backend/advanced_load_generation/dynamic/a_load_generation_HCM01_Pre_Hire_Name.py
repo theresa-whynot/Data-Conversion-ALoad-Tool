@@ -14,7 +14,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\catch-up
 sheet_column_map = {
     "Applicant": [
         ("Worker_ID", "Applicant Key"),
-        ("Worker_ID", "Applicant ID"),
+        ("Applicant_ID_Value", "Applicant ID"),
         ("Country_Reference_ID", "Legal Name Data - Name Detail Data - Country Reference ID"),
         ("Legal_Prefix_Reference_ID", "Legal Name Data - Name Detail Data - Prefix Data - Title Reference ID"),
         ("Legal_First_Name", "Legal Name Data - Name Detail Data - First Name"),
@@ -28,6 +28,13 @@ sheet_column_map = {
         ("Preferred_Middle_Name", "Preferred Name Data - Name Detail Data - Middle Name"),
         ("Preferred_Last_Name", "Preferred Name Data - Name Detail Data - Last Name"),
         ("Preferred_Suffix_Reference_ID", "Preferred Name Data - Name Detail Data - Suffix Data - Social Suffix Reference ID"),
+    ],
+}
+
+# Prefix Applicant ID with A_ while leaving Applicant Key as the raw Worker_ID
+source_derived_columns = {
+    "Applicant": [
+        {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"},
     ],
 }
 
@@ -85,4 +92,5 @@ transfer_data_multiple_sheets(
     header_rows,
     default_columns,
     source_default_rules=source_default_rules,
+    source_derived_columns=source_derived_columns,
 )
