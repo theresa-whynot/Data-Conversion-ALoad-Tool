@@ -28,6 +28,7 @@ sheet_column_map = {
         ("Source_Row_Number", "Address Data Key"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data Key", "stack"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data", "stack"),
+        (("Address_Line_1", "Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Grid-11": [
         ("Worker_ID", "Applicant Key"),
@@ -60,7 +61,6 @@ default_columns = {
         ("Effective Date", "1900-01-01", None), 
     ],
     "Grid-8": [
-        ("Address Line Data Type", "Address_Line_1", None), 
     ],
     "Grid-11": [
         ("ID type", "Communication_Usage_Behavior_ID", None), 
