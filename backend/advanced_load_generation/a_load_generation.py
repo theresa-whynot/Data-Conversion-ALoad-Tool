@@ -467,12 +467,16 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
 
                     elif mapping_type == "stack_name":
                         # Write the source column name for each non-blank stacked value
+                        # Normalize Home_Address_Line_* → Address_Line_* for BEN01-style sources
                         pairs = stack_pairs_by_target.get(target_col, [])
                         if stack_index < len(pairs):
+                            source_name = pairs[stack_index][0]
+                            if source_name.startswith("Home_Address_Line_"):
+                                source_name = source_name.replace("Home_Address_Line_", "Address_Line_", 1)
                             write_as_text(
                                 target_ws,
                                 f"{target_column_letters[target_col]}{current_row}",
-                                pairs[stack_index][0],
+                                source_name,
                                 target_col
                             )
                             row_written = True

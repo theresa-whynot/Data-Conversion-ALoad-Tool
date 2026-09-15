@@ -41,7 +41,9 @@ sheet_column_map = {
     "Grid-4": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
         ("Source_Row_Number", "Address Data Key"),
-        ("Home_Address_Line_1","Address Line Data"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Key", "stack"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data", "stack"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Grid-9": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
@@ -115,8 +117,6 @@ default_columns = {
     "Grid-4": [
         ("Person Data Key", "1", None), 
         ("Beneficiary Person Personal Information Data Key","1",None),
-        ("Address Line Data Key","1",None),
-        ("Address Line Data Type", "Address_Line_1", None),
     ],
     "Grid-9": [
         ("Person Data Key", "1", None), 

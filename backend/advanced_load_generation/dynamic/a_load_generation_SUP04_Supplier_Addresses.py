@@ -29,6 +29,7 @@ sheet_column_map = {
         ("Source_Row_Number", "Address Data Key"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data Key", "stack"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data", "stack"),
+        (("Address_Line_1", "Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Grid-7": [
         ("Supplier_ID", "Supplier Key"),
@@ -57,8 +58,6 @@ default_columns = {
         ("Country Region Reference ID type", "Country_Region_ID", None), 
     ],
     "Grid-4": [
-        ("Address Line Data Key","1", None),
-        ("Address Line Data Type","ADDRESS_LINE_1", None),
     ],
     "Grid-7": [
         ("ID type","Communication_Usage_Behavior_ID", "ID"),
