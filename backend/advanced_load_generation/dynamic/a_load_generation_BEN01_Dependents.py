@@ -46,6 +46,7 @@ sheet_column_map = {
     ],
     "Address Data": [
         ("Dependent_ID", "Add Dependent Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Home_Address_Country", "Country Reference ID"),
         ("Home_Address_City","Municipality"),
         ("Home_Address_Region","Country Region Reference ID"),
@@ -53,16 +54,19 @@ sheet_column_map = {
     ],
     "Address Line Data": [
         ("Dependent_ID", "Add Dependent Key"),
+        ("Source_Row_Number", "Address Data Key"),
         (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Key", "stack"),
         (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data", "stack"),
         (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Email Address Data": [
         ("Dependent_ID", "Add Dependent Key"),
+        ("Source_Row_Number", "Email Address Data Key"),
         ("Email_Address","Email Address"),
     ],
     "Phone Data": [
         ("Dependent_ID", "Add Dependent Key"),
+        ("Source_Row_Number", "Phone Data Key"),
         ("Home_Phone_Number", "Phone Number"),
         ("Home_Phone_Country","Country ISO Code"),
         ("Home_Phone_Device_Type","Phone Device Type Reference ID"),
@@ -108,7 +112,6 @@ default_columns = {
         ("ID Type Reference ID type","National_ID_Type_Code",None),
     ],
     "Address Data": [
-        ("Address Data Key", "1", None),
         ("Effective Date","1900-01-01", None), 
         ("Country Reference ID type", "ISO_3166-1_Alpha-3_Code", None),
         ("Country Region Reference ID type","Country_Region_ID",None),
@@ -118,17 +121,14 @@ default_columns = {
         ("Type Reference ID","Home",None)
     ],
     "Address Line Data": [
-        ("Address Data Key","1",None),
     ],
     "Email Address Data": [
-        ("Email Address Data Key","1", None),
         ("Public","0",None),
         ("Primary","1",None),
         ("Type Reference ID type","Communication_Usage_Type_ID",None),
         ("Type Reference ID","Home",None)
     ],
     "Phone Data": [
-        ("Phone Data Key","1",None),
         ("Phone Device Type Reference ID type","Phone_Device_Type_ID",None),
         ("Public","0",None),
         ("Primary","1",None),

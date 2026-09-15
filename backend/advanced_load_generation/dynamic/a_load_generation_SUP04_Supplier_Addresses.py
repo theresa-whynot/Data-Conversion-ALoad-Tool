@@ -14,7 +14,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\a_load\S
 sheet_column_map = {
     "Supplier - Address Data": [
         ("Supplier_ID", "Supplier Key"),
-        ("Address_ID", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Country_Reference_ID", "Country Reference ID"),
         ("Municipality", "Municipality"),
         ("Country_Region_Reference_ID", "Country Region Reference ID"),
@@ -26,14 +26,14 @@ sheet_column_map = {
     ],
     "Grid-4": [
         ("Supplier_ID", "Supplier Key"),
-        ("Address_ID", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data Key", "stack"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data", "stack"),
         (("Address_Line_1", "Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Grid-7": [
         ("Supplier_ID", "Supplier Key"),
-        ("Address_ID", "Address Data Key"),
+        ("Source_Row_Number", "Address Data Key"),
         (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "Use For Reference Key", "stack"),
         (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "ID", "stack"),
     ],
