@@ -14,10 +14,11 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\Previous
 sheet_column_map = {
     "Previous System Job History": [
         ("Worker_ID", "Previous System Job History Key"),
+        ("Worker_ID", "Worker Reference ID"),
     ],
     "Grid-1": [
         ("Worker_ID", "Previous System Job History Key"),
-        ("Worker_ID", "Previous System Job History - Previous System Job History Key"),
+        ("Source_Row_Number", "Previous System Job History - Previous System Job History Key"),
         ("Worker_History_Name", "Worker History Name"),
         ("Action_Date", "Action Date"),
         ("Reason", "Reason"),
