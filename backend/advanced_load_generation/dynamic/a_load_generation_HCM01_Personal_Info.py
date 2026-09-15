@@ -38,6 +38,7 @@ sheet_column_map = {
 
 # Define filters and subfilters for each sheet
 filters = {
+    "Ethnicity Reference": [("Ethnicity_Reference_ID", "Exclude Blanks")],
     "Gender Identity Reference": [("Gender_Identity_Reference_ID", "Exclude Blanks")],
 }
 
