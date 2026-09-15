@@ -32,6 +32,7 @@ sheet_column_map = {
     ],
     "Grid-3": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Home_Address_Country", "Country Reference ID"),
         ("Home_Address_City","Municipality"),
         ("Home_Address_Region","Country Region Reference ID"),
@@ -39,10 +40,12 @@ sheet_column_map = {
     ],
     "Grid-4": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
+        ("Source_Row_Number", "Address Data Key"),
         ("Home_Address_Line_1","Address Line Data"),
     ],
     "Grid-9": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
+        ("Source_Row_Number", "Phone Data Key"),
         ("Home_Phone_Number", "Phone Number"),
         ("Home_Phone_Country","Country ISO Code"),
         ("Home_Phone_Device_Type","Phone Device Type Reference ID"),
@@ -50,6 +53,7 @@ sheet_column_map = {
     ],
     "Grid-12": [
         ("Beneficiary_ID", "Change Beneficiary Key"),
+        ("Source_Row_Number", "Email Address Data Key"),
         ("Email_Address","Email Address"),
     ],
     "Trust Data": [
@@ -100,7 +104,6 @@ default_columns = {
     "Grid-3": [
         ("Person Data Key", "1", None), 
         ("Beneficiary Person Personal Information Data Key","1",None),
-        ("Address Data Key","1",None),
         ("Effective Date","1900-01-01", None), 
         ("Country Reference ID type", "ISO_3166-1_Alpha-3_Code", None),
         ("Country Region Reference ID type","Country_Region_ID",None),
@@ -112,14 +115,12 @@ default_columns = {
     "Grid-4": [
         ("Person Data Key", "1", None), 
         ("Beneficiary Person Personal Information Data Key","1",None),
-        ("Address Data Key","1",None),
         ("Address Line Data Key","1",None),
         ("Address Line Data Type", "Address_Line_1", None),
     ],
     "Grid-9": [
         ("Person Data Key", "1", None), 
         ("Beneficiary Person Personal Information Data Key","1",None),
-        ("Phone Data Key","1",None),
         ("Phone Device Type Reference ID type","Phone_Device_Type_ID",None),
         ("Public","0",None),
         ("Primary","1",None),
@@ -129,7 +130,6 @@ default_columns = {
     "Grid-12": [
         ("Person Data Key", "1", None), 
         ("Beneficiary Person Personal Information Data Key","1",None),
-        ("Email Address Data Key","1", None),
         ("Public","0",None),
         ("Primary","1",None),
         ("Type Reference ID type","Communication_Usage_Type_ID",None),

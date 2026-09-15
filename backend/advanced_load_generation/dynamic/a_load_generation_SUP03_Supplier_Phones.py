@@ -15,7 +15,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\NKU\a_load\S
 sheet_column_map = {
     "Phone Data": [
         ("Supplier_ID", "Supplier Key"),
-        ("Phone_ID", "Phone Data Key"),
+        ("Source_Row_Number", "Phone Data Key"),
         ("Country_Reference_ID", "Country ISO Code"),
         ("Phone_Number", "Phone Number"),
         ("Phone_Extension", "Phone Extension"),
@@ -26,7 +26,7 @@ sheet_column_map = {
     ],
     "Phone Data - Use For Reference": [
         ("Supplier_ID", "Supplier Key"),
-        ("Phone_ID", "Phone Data Key"),
+        ("Source_Row_Number", "Phone Data Key"),
         (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "Use For Reference Key", "stack"),
         (("Usage_1", "Usage_2", "Usage_3", "Usage_4"), "ID", "stack"),
     ],
