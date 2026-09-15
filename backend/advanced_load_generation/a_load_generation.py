@@ -294,9 +294,36 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         "Earliest_Hire_Date",
         "Compensation_Effective_Date",
         "Date_of_Birth",
+        "Marital_Status_Date",
         "Effective as of",
-        "Effective Date"
+        "Effective Date",
     }
+
+    def is_date_column(source_col=None, target_col=None):
+        """Match DATE_COLUMNS against source or target names (spaces or underscores)."""
+        candidates = []
+        for col in (source_col, target_col):
+            if not isinstance(col, str):
+                continue
+            stripped = col.strip()
+            candidates.extend(
+                {
+                    stripped,
+                    stripped.replace(" ", "_"),
+                    stripped.replace("_", " "),
+                }
+            )
+        return any(candidate in DATE_COLUMNS for candidate in candidates)
+
+    def format_date_value(value):
+        """Normalize date values to YYYY-MM-DD with no time component."""
+        parsed_date = pd.to_datetime(value, errors="coerce")
+        if pd.isna(parsed_date):
+            return None
+        # Normalize timestamps/datetimes down to calendar date only
+        if hasattr(parsed_date, "to_pydatetime"):
+            parsed_date = parsed_date.to_pydatetime()
+        return parsed_date.strftime("%Y-%m-%d")
     
  
     def is_blank(value):
@@ -353,14 +380,18 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         elif is_blank(value):
             return
 
-        if target_col in DATE_COLUMNS:
-            parsed_date = pd.to_datetime(value, errors="coerce")
-            if pd.notnull(parsed_date):
-                ws[cell_ref] = parsed_date.strftime("%Y-%m-%d")
+        if is_date_column(source_col=source_col, target_col=target_col):
+            formatted = format_date_value(value)
+            if formatted is not None:
+                ws[cell_ref].number_format = "@"
+                ws[cell_ref] = formatted
                 return
 
         # Convert exact Yes/No source values to 1/0 for the target sheet
         text_value = str(value)
+        # Strip leftover midnight timestamps if a date-like value slipped through
+        if text_value.endswith(" 00:00:00"):
+            text_value = text_value[:-9]
         if text_value == "Yes":
             text_value = "1"
         elif text_value == "No":
