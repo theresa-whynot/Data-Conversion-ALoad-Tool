@@ -53,7 +53,9 @@ sheet_column_map = {
     ],
     "Address Line Data": [
         ("Dependent_ID", "Add Dependent Key"),
-        ("Home_Address_Line_1","Address Line Data"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Key", "stack"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data", "stack"),
+        (("Home_Address_Line_1", "Home_Address_Line_2"), "Address Line Data Type", "stack_name"),
     ],
     "Email Address Data": [
         ("Dependent_ID", "Add Dependent Key"),
@@ -117,9 +119,6 @@ default_columns = {
     ],
     "Address Line Data": [
         ("Address Data Key","1",None),
-        ("Address Line Data Key","1",None),
-        ("Address Line Data Type", "Address_Line_1", None),
-        
     ],
     "Email Address Data": [
         ("Email Address Data Key","1", None),
