@@ -33,14 +33,30 @@ sheet_column_map = {
     "Grid-11": [
         ("Worker_ID", "Applicant Key"),
         ("Source_Row_Number", "Address Data Key"),
-        ("Communication_Usage_Reference_ID","Use For Reference Key"),
-        ("Communication_Usage_Reference_ID","ID"),
+        (
+            (
+                "Communication_Usage_Reference_ID_1",
+                "Communication_Usage_Reference_ID_2",
+                "Communication_Usage_Reference_ID_3",
+            ),
+            "Use For Reference Key",
+            "stack",
+        ),
+        (
+            (
+                "Communication_Usage_Reference_ID_1",
+                "Communication_Usage_Reference_ID_2",
+                "Communication_Usage_Reference_ID_3",
+            ),
+            "ID",
+            "stack",
+        ),
     ],
 }
 
 # Define filters and subfilters for each sheet
+# Blank usage values are skipped by stack mapping; rows with no usage values write nothing.
 filters = {
-    "Grid-11": ("Communication_Usage_Reference_ID", "Exclude Blanks"),  
 }
 
 # Define the header row for each sheet
