@@ -16,6 +16,7 @@ sheet_column_map = {
         ("Worker_ID", "Employee ID"),
         ("Hire_Date", "Hire Date"),
         ("Continuous_Service_Date", "Continuous Service Date"),
+        ("Probation_Start_Date", "Probation Start Date"),
         ("Probation_End_Date", "Probation End Date"),
         ("End_Employment_Date", "End Employment Date"),
         ("Position_Start_Date_For_Conversion", "Position Start Date for Conversion"),
