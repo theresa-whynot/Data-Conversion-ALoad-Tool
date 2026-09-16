@@ -231,6 +231,41 @@ def apply_filters(source_data, sheet_filters):
 
     return sheet_data
 
+def parse_column_mapping(mapping):
+    """
+    Normalize a column mapping tuple.
+
+    Supported forms:
+    - (source, target)
+    - (source, target, mapping_type)
+    - (source, target, mapping_type, (condition_col, condition_value))
+
+    mapping_type is default/stack/stack_name/concat.
+    Optional condition limits the write to rows where source condition_col equals condition_value.
+    """
+    if not isinstance(mapping, tuple) or len(mapping) < 2:
+        raise ValueError(f"Invalid column mapping: {mapping!r}")
+
+    source_col = mapping[0]
+    target_col = mapping[1]
+    mapping_type = mapping[2] if len(mapping) >= 3 else "default"
+    condition = mapping[3] if len(mapping) >= 4 else None
+    return source_col, target_col, mapping_type, condition
+
+
+def mapping_condition_matches(row_data, source_data, condition) -> bool:
+    """True when there is no condition, or the source row matches condition_col=condition_value."""
+    if not condition:
+        return True
+    condition_col, condition_value = condition
+    if condition_col not in source_data.columns:
+        return False
+    actual = getattr(row_data, condition_col)
+    if is_blank(actual):
+        return False
+    return str(actual).strip() == str(condition_value).strip()
+
+
 def get_target_column_letters(target_ws, column_map_list, header_row):
     """
     Maps target columns to their respective Excel column letters.
@@ -410,9 +445,9 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         # Store (source_column_name, value) so stack_name can write Address_Line_1 / Address_Line_2, etc.
         stack_pairs_by_target = {}
         for mapping in column_map_list:
-            source_col, target_col, mapping_type = (
-                mapping if isinstance(mapping, tuple) and len(mapping) == 3 else (*mapping, "default")
-            )
+            source_col, target_col, mapping_type, condition = parse_column_mapping(mapping)
+            if not mapping_condition_matches(row_data, source_data, condition):
+                continue
 
             if isinstance(source_col, tuple) and mapping_type in {"stack", "stack_name"}:
                 stack_pairs_by_target[target_col] = [
@@ -434,9 +469,9 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
             row_written = False  # Track if valid data was written
 
             for mapping in column_map_list:
-                source_col, target_col, mapping_type = (
-                    mapping if isinstance(mapping, tuple) and len(mapping) == 3 else (*mapping, "default")
-                )
+                source_col, target_col, mapping_type, condition = parse_column_mapping(mapping)
+                if not mapping_condition_matches(row_data, source_data, condition):
+                    continue
 
                 if isinstance(source_col, tuple):
                     if mapping_type == "concat":
