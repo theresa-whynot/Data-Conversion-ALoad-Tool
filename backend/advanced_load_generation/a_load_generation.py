@@ -295,6 +295,8 @@ def write_data_to_target_sheet(source_data, target_ws, column_map_list, target_c
         "Compensation_Effective_Date",
         "Date_of_Birth",
         "Marital_Status_Date",
+        "Probation_Start_Date",
+        "Probation_End_Date",
         "Effective as of",
         "Effective Date",
     }
