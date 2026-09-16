@@ -21,8 +21,30 @@ sheet_column_map = {
         ("Code", "Organization Code"),
         ("Include_Manager_In_Name", "Include Leader in Name"),
         ("Sup_Org_Location_ID", "Primary Location Reference ID"),
-        ("Staffing_Model", "Job Management Enabled"),
-        ("Staffing_Model", "Position Management Enabled"),
+        ("Job_Management_Enabled_Value", "Job Management Enabled"),
+        ("Position_Management_Enabled_Value", "Position Management Enabled"),
+    ],
+}
+
+# Derive 1/0 staffing flags from Staffing_Model
+source_derived_columns = {
+    "Supervisory Organization": [
+        {
+            "source": "Staffing_Model",
+            "dest": "Job_Management_Enabled_Value",
+            "value_map": {
+                "Job Management": "1",
+                "Position Management": "0",
+            },
+        },
+        {
+            "source": "Staffing_Model",
+            "dest": "Position_Management_Enabled_Value",
+            "value_map": {
+                "Job Management": "0",
+                "Position Management": "1",
+            },
+        },
     ],
 }
 
@@ -51,4 +73,12 @@ default_columns = {
 }
 
 # Run the data transfer with filtering and default columns
-transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns)
+transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_derived_columns=source_derived_columns,
+)
