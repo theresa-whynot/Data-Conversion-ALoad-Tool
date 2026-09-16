@@ -54,11 +54,14 @@ def _hcm_number(script_name: str) -> int | None:
 
 
 def requires_staffing_model_reminder(script_name: str) -> bool:
-    """True for Hire / Create Position / Contingent / Job|Position Management scripts."""
+    """True for Hire / Create Position / Contingent / Job|Position Management / HCM40 scripts."""
     name = (script_name or "").lower()
     # HCMConfig10 is the lookup source, not a consumer of Staffing_Model.
     if "hcmconfig10" in name:
         return False
+    number = _hcm_number(script_name)
+    if number == 40:
+        return True
     return (
         "job_management" in name
         or "position_management" in name
