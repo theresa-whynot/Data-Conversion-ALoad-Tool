@@ -26,6 +26,45 @@ st.set_page_config(
     layout="centered",
 )
 
+STAFFING_MODEL_REMINDER = (
+    'Ensure you manually add the column "Staffing_Model" to the source file '
+    'with options of "Job Management" or "Position Management", looked up '
+    "off of the HCMConfig10 file, else the file will not generate properly."
+)
+
+
+def requires_staffing_model_reminder(script_name: str) -> bool:
+    """True for Hire / Create Position / Contingent / Job|Position Management scripts."""
+    name = (script_name or "").lower()
+    # HCMConfig10 is the lookup source, not a consumer of Staffing_Model.
+    if "hcmconfig10" in name:
+        return False
+    return (
+        "job_management" in name
+        or "position_management" in name
+        or "positions_management" in name
+        or "create_position" in name
+        or "hire_employee" in name
+        or "contract_contingent_worker" in name
+    )
+
+
+@st.dialog("Staffing Model Required")
+def staffing_model_reminder_dialog() -> None:
+    st.write(STAFFING_MODEL_REMINDER)
+    if st.button("Got it", type="primary", use_container_width=True):
+        st.session_state.pop("staffing_reminder_pending", None)
+        st.rerun()
+
+
+def maybe_open_staffing_model_reminder(job_id: int, script_name: str) -> None:
+    """Open the reminder popup when the user switches onto a matching script."""
+    prev_key = f"prev_script_{job_id}"
+    previous = st.session_state.get(prev_key)
+    if script_name != previous and requires_staffing_model_reminder(script_name):
+        st.session_state["staffing_reminder_pending"] = True
+    st.session_state[prev_key] = script_name
+
 
 def pick_excel_file(title: str) -> str:
     """Open a local OS file dialog and return the selected Excel path."""
@@ -164,9 +203,14 @@ for index, job in enumerate(st.session_state.jobs):
         help="Mappings come from backend/advanced_load_generation/dynamic/",
     )
 
+    selected_script = st.session_state[f"script_{job_id}"]
+    maybe_open_staffing_model_reminder(job_id, selected_script)
+    if requires_staffing_model_reminder(selected_script):
+        st.warning(STAFFING_MODEL_REMINDER)
+
     meta = None
     try:
-        meta = describe_script(st.session_state[f"script_{job_id}"])
+        meta = describe_script(selected_script)
     except Exception as exc:  # noqa: BLE001
         st.warning(f"Could not inspect script defaults: {exc}")
 
@@ -223,6 +267,9 @@ for index, job in enumerate(st.session_state.jobs):
             st.error(message)
 
     st.divider()
+
+if st.session_state.get("staffing_reminder_pending"):
+    staffing_model_reminder_dialog()
 
 if st.button("Add a-load section", use_container_width=True):
     st.session_state.jobs.append(
