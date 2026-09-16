@@ -32,6 +32,26 @@ STAFFING_MODEL_REMINDER = (
     "off of the HCMConfig10 file, else the file will not generate properly."
 )
 
+CONTINGENT_WORKER_ID_REMINDER = (
+    "You will need to update the Employee_ID to Contingent_Worker_ID on the "
+    "a-load if the worker is a Contingent Worker. Do this step manually on "
+    "the a-load."
+)
+
+
+def _hcm_number(script_name: str) -> int | None:
+    """Return the HCM## number from a script display name, if present."""
+    name = script_name or ""
+    if not name.upper().startswith("HCM"):
+        return None
+    digits = []
+    for char in name[3:]:
+        if char.isdigit():
+            digits.append(char)
+        else:
+            break
+    return int("".join(digits)) if digits else None
+
 
 def requires_staffing_model_reminder(script_name: str) -> bool:
     """True for Hire / Create Position / Contingent / Job|Position Management scripts."""
@@ -49,20 +69,37 @@ def requires_staffing_model_reminder(script_name: str) -> bool:
     )
 
 
+def requires_contingent_worker_id_reminder(script_name: str) -> bool:
+    """True for HCM10 through HCM28 scripts."""
+    number = _hcm_number(script_name)
+    return number is not None and 10 <= number <= 28
+
+
 @st.dialog("Staffing Model Required")
 def staffing_model_reminder_dialog() -> None:
     st.write(STAFFING_MODEL_REMINDER)
-    if st.button("Got it", type="primary", use_container_width=True):
+    if st.button("Got it", type="primary", use_container_width=True, key="staffing_got_it"):
         st.session_state.pop("staffing_reminder_pending", None)
         st.rerun()
 
 
-def maybe_open_staffing_model_reminder(job_id: int, script_name: str) -> None:
-    """Open the reminder popup when the user switches onto a matching script."""
+@st.dialog("Contingent Worker ID Reminder")
+def contingent_worker_id_reminder_dialog() -> None:
+    st.write(CONTINGENT_WORKER_ID_REMINDER)
+    if st.button("Got it", type="primary", use_container_width=True, key="cw_id_got_it"):
+        st.session_state.pop("contingent_worker_id_reminder_pending", None)
+        st.rerun()
+
+
+def maybe_open_script_reminders(job_id: int, script_name: str) -> None:
+    """Open reminder popups when the user switches onto a matching script."""
     prev_key = f"prev_script_{job_id}"
     previous = st.session_state.get(prev_key)
-    if script_name != previous and requires_staffing_model_reminder(script_name):
-        st.session_state["staffing_reminder_pending"] = True
+    if script_name != previous:
+        if requires_staffing_model_reminder(script_name):
+            st.session_state["staffing_reminder_pending"] = True
+        if requires_contingent_worker_id_reminder(script_name):
+            st.session_state["contingent_worker_id_reminder_pending"] = True
     st.session_state[prev_key] = script_name
 
 
@@ -204,9 +241,11 @@ for index, job in enumerate(st.session_state.jobs):
     )
 
     selected_script = st.session_state[f"script_{job_id}"]
-    maybe_open_staffing_model_reminder(job_id, selected_script)
+    maybe_open_script_reminders(job_id, selected_script)
     if requires_staffing_model_reminder(selected_script):
         st.warning(STAFFING_MODEL_REMINDER)
+    if requires_contingent_worker_id_reminder(selected_script):
+        st.warning(CONTINGENT_WORKER_ID_REMINDER)
 
     meta = None
     try:
@@ -270,6 +309,8 @@ for index, job in enumerate(st.session_state.jobs):
 
 if st.session_state.get("staffing_reminder_pending"):
     staffing_model_reminder_dialog()
+elif st.session_state.get("contingent_worker_id_reminder_pending"):
+    contingent_worker_id_reminder_dialog()
 
 if st.button("Add a-load section", use_container_width=True):
     st.session_state.jobs.append(
