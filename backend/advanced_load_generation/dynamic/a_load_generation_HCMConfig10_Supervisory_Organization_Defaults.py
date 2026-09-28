@@ -18,14 +18,14 @@ sheet_column_map = {
         ("Sup_Org_ID", "Supervisory Organization Reference ID"),
     ],
     "Grid-2": [
-        (("Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID"), "Organization Assignment Restrictions Key", "stack"),
-        (("Default_Company", "Default_Cost_Center", "Default_Function", "Default_Business_Unit", "Default_Fund", "Default_Department","Default_Cashflow" ), "Organization Assignment Restrictions by Type Data Key", "stack"),
+        (("Sup_Org_ID", "Sup_Org_ID"), "Organization Assignment Restrictions Key", "stack"),
+        (("Default_Company", "Default_Cost_Center"), "Organization Assignment Restrictions by Type Data Key", "stack"),
     ],
     "Default Organization Data": [
-        (("Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID", "Sup_Org_ID"), "Organization Assignment Restrictions Key", "stack"),
-        (("Default_Company", "Default_Cost_Center", "Default_Function", "Default_Business_Unit", "Default_Fund", "Default_Department", "Default_Cashflow"), "Organization Assignment Restrictions by Type Data Key", "stack"),
-        (("Default_Company", "Default_Cost_Center", "Default_Function", "Default_Business_Unit", "Default_Fund", "Default_Department", "Default_Cashflow"), "Default Organization Data Key", "stack"),
-        (("Default_Company", "Default_Cost_Center", "Default_Function", "Default_Business_Unit", "Default_Fund", "Default_Department", "Default_Cashflow"), "Default Organization Reference ID", "stack"),
+        (("Sup_Org_ID", "Sup_Org_ID"), "Organization Assignment Restrictions Key", "stack"),
+        (("Default_Company", "Default_Cost_Center"), "Organization Assignment Restrictions by Type Data Key", "stack"),
+        (("Default_Company", "Default_Cost_Center"), "Default Organization Data Key", "stack"),
+        (("Default_Company", "Default_Cost_Center"), "Default Organization Reference ID", "stack"),
     ],
 }
 
