@@ -12,7 +12,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\CATS\Hire Em
 sheet_column_map = {
     "Implementation Employee Data": [
         ("Worker_ID", "Implementation Employee Data Key"),
-        ("Worker_ID", "Applicant Reference ID"),
+        ("Applicant_ID_Value", "Applicant Reference ID"),
         ("Worker_ID", "Employee ID"),
         ("Hire_Date", "Hire Date"),
         ("Continuous_Service_Date", "Continuous Service Date"),
@@ -47,6 +47,13 @@ sheet_column_map = {
     ],
 }
 
+# Prefix Applicant Reference ID with A_ while leaving Employee ID as the raw Worker_ID
+source_derived_columns = {
+    "Implementation Employee Data": [
+        {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"},
+    ],
+}
+
 # Define filters and subfilters for each sheet
 filters = {
 }
@@ -73,4 +80,12 @@ default_columns = {
 }
 
 # Run the data transfer with filtering and default columns
-transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns)
+transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_derived_columns=source_derived_columns,
+)

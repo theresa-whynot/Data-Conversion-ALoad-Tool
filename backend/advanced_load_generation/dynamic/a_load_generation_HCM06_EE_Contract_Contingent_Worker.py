@@ -12,7 +12,7 @@ target_file = r"C:\Users\TheresaReinhard\OneDrive - AVAAP\Documents\CATS\Contrac
 sheet_column_map = {
     "Contingent Worker Data": [
         ("Worker_ID", "Contingent Worker Data Key"),
-        ("Worker_ID", "Applicant Reference ID"),
+        ("Applicant_ID_Value", "Applicant Reference ID"),
         ("Worker_ID", "Contingent Worker ID"),
         ("Contract_Start_Date", "Contract Begin Date"),
         ("Contract_End_Date", "Contract End Date"),
@@ -33,6 +33,13 @@ sheet_column_map = {
         ("Contract_Pay_Rate", "Contract Pay Rate"),
         ("Currency_Reference_ID", "Currency Reference ID"),
         ("Frequency_Reference_ID", "Frequency Reference ID"),
+    ],
+}
+
+# Prefix Applicant Reference ID with A_ while leaving Contingent Worker ID as the raw Worker_ID
+source_derived_columns = {
+    "Contingent Worker Data": [
+        {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"},
     ],
 }
 
@@ -65,4 +72,12 @@ default_columns = {
 }
 
 # Run the data transfer with filtering and default columns
-transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns)
+transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_derived_columns=source_derived_columns,
+)
