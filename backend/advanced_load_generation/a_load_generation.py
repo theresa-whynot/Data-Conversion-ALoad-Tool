@@ -81,6 +81,7 @@ def apply_source_derived_columns(source_data, specs):
 
     Supported specs:
     - prefix: {"source": "Worker_ID", "dest": "Applicant_ID_Value", "prefix": "A_"}
+    - left: {"source": "Tax_Code", "dest": "State_Code", "left": 2}
     - value_map: {
           "source": "Staffing_Model",
           "dest": "Job_Management_Enabled_Value",
@@ -96,6 +97,7 @@ def apply_source_derived_columns(source_data, specs):
         dest_col = spec.get("dest")
         prefix = spec.get("prefix", "")
         value_map = spec.get("value_map")
+        left_chars = spec.get("left")
         if not source_col or not dest_col:
             continue
         if source_col not in df.columns:
@@ -113,6 +115,16 @@ def apply_source_derived_columns(source_data, specs):
                 return mapping.get(str(value).strip())
 
             df[dest_col] = df[source_col].map(map_value)
+        elif left_chars is not None:
+            count = int(left_chars)
+
+            def take_left(value, n=count):
+                if is_blank(value):
+                    return None
+                text = str(value).strip()
+                return text[:n] if text else None
+
+            df[dest_col] = df[source_col].map(take_left)
         else:
             df[dest_col] = df[source_col].map(
                 lambda value: None if is_blank(value) else f"{prefix}{value}"
