@@ -174,7 +174,11 @@ def transfer_data_multiple_sheets(
 
         # Apply filters specific to this sheet
         if filters and sheet_name in filters:
-            sheet_data = apply_filters(source_data.copy(), filters[sheet_name])
+            sheet_data = apply_filters(
+                source_data.copy(),
+                filters[sheet_name],
+                column_map_list=column_map_list,
+            )
         else:
             sheet_data = source_data.copy()  # No filters, use all data
 
@@ -203,13 +207,67 @@ def transfer_data_multiple_sheets(
     target_wb.save(target_file)
     print(f"Data transferred successfully to {target_file} for all specified sheets!")
 
-def apply_filters(source_data, sheet_filters):
+def stack_columns_for_filter(column_map_list, filter_col):
+    """
+    If filter_col is part of a stack/stack_name mapping, return that full source
+    column group. Exclude Blanks should keep the row when any stacked column
+    has a value, not only when the named filter column is filled.
+    """
+    if not column_map_list:
+        return [filter_col]
+
+    for mapping in column_map_list:
+        try:
+            source_col, _target_col, mapping_type, _condition = parse_column_mapping(mapping)
+        except ValueError:
+            continue
+        if (
+            mapping_type in {"stack", "stack_name"}
+            and isinstance(source_col, tuple)
+            and filter_col in source_col
+        ):
+            return list(source_col)
+    return [filter_col]
+
+
+def row_has_nonblank(row, columns):
+    """True if any named column on the row has a non-blank value."""
+    for col in columns:
+        if col not in row.index:
+            continue
+        if not is_blank(row[col]):
+            return True
+    return False
+
+
+def apply_exclude_blanks(sheet_data, filter_col, column_map_list=None):
+    """
+    Drop rows where the filter column is blank.
+
+    When the filter column is part of a stack mapping, keep the row if any
+    column in that stack group is populated.
+    """
+    cols_to_check = [
+        col
+        for col in stack_columns_for_filter(column_map_list, filter_col)
+        if col in sheet_data.columns
+    ]
+    if not cols_to_check:
+        return sheet_data
+
+    mask = sheet_data.apply(lambda row: row_has_nonblank(row, cols_to_check), axis=1)
+    return sheet_data[mask]
+
+
+def apply_filters(source_data, sheet_filters, column_map_list=None):
     """
     Applies the given filters to the source data for a specific sheet.
 
     Parameters:
     - source_data: The source data to be filtered.
     - sheet_filters: A list of filter conditions (tuples) or a single filter condition (tuple).
+    - column_map_list: Optional sheet mappings; used so Exclude Blanks on a
+                        stacked column keeps rows when any stack slot is filled.
 
     Returns:
     - The filtered source data.
@@ -220,28 +278,28 @@ def apply_filters(source_data, sheet_filters):
     if isinstance(sheet_filters, list):
         # Apply multiple filter conditions
         for filter_col, filter_val in sheet_filters:
+            if filter_val == "Exclude Blanks":
+                sheet_data = apply_exclude_blanks(
+                    sheet_data, filter_col, column_map_list=column_map_list
+                )
+                continue
+
             if filter_col not in sheet_data.columns:
                 continue
 
-            if filter_val == "Exclude Blanks":
-                # Exclude rows where the column value is NaN or blank
-                sheet_data = sheet_data[sheet_data[filter_col].notna()]  # Exclude NaN values
-                sheet_data = sheet_data[sheet_data[filter_col].apply(lambda x: str(x).strip() != "")]
-            else:
-                # Apply the filter if it's a specific value
-                sheet_data = sheet_data[sheet_data[filter_col] == filter_val]
+            # Apply the filter if it's a specific value
+            sheet_data = sheet_data[sheet_data[filter_col] == filter_val]
 
     elif isinstance(sheet_filters, tuple):
         # Apply a single filter condition
         filter_col, filter_val = sheet_filters
 
-        if filter_col not in sheet_data.columns:
-            return sheet_data  # Return unfiltered data if column is missing
-
         if filter_val == "Exclude Blanks":
-            # Exclude rows where the column value is NaN or blank
-            sheet_data = sheet_data[sheet_data[filter_col].notna()]
-            sheet_data = sheet_data[sheet_data[filter_col].apply(lambda x: str(x).strip() != "")]
+            sheet_data = apply_exclude_blanks(
+                sheet_data, filter_col, column_map_list=column_map_list
+            )
+        elif filter_col not in sheet_data.columns:
+            return sheet_data  # Return unfiltered data if column is missing
         else:
             # Apply the filter if it's a specific value
             sheet_data = sheet_data[sheet_data[filter_col] == filter_val]
