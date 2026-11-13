@@ -21,12 +21,20 @@ sheet_column_map = {
     "Grid-2": [
         (("Worker_ID", "Worker_County_Reference_ID", "Effective_Date"), "Payroll USA Worker State and Local Tax Election Key", "concat"),
         ("Worker_County_Reference_ID", "Payroll State Authority Reference Descriptor"),
+        ("State_Authority_ID_Value", "Payroll State Authority Reference ID"),
     ],
     "Payroll State County Tax Data": [
         (("Worker_ID", "Worker_County_Reference_ID", "Effective_Date"), "Payroll USA Worker State and Local Tax Election Key", "concat"),
         ("Worker_County_Reference_ID", "Payroll State County Tax Data Key"),
         ("Tax_Address_Type_Reference_ID", "Tax Address Type Reference ID"),
         ("Worker_County_Reference_ID", "Payroll Local County Authority Reference ID"),
+    ],
+}
+
+# First 2 characters of the county tax code for Payroll State Authority Reference ID
+source_derived_columns = {
+    "Grid-2": [
+        {"source": "Worker_County_Reference_ID", "dest": "State_Authority_ID_Value", "left": 2},
     ],
 }
 
@@ -60,4 +68,12 @@ default_columns = {
 }
 
 # Run the data transfer with filtering and default columns
-transfer_data_multiple_sheets(source_file, target_file, sheet_column_map, filters, header_rows, default_columns)
+transfer_data_multiple_sheets(
+    source_file,
+    target_file,
+    sheet_column_map,
+    filters,
+    header_rows,
+    default_columns,
+    source_derived_columns=source_derived_columns,
+)
