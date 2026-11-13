@@ -33,9 +33,9 @@ STAFFING_MODEL_REMINDER = (
 )
 
 CONTINGENT_WORKER_ID_REMINDER = (
-    "You will need to update the Employee_ID to Contingent_Worker_ID on the "
-    "a-load if the worker is a Contingent Worker. Do this step manually on "
-    "the a-load."
+    "After the file is generated, you will need to manually update any "
+    "Employee_ID to Contingent_Worker_ID on the a-load if these are "
+    "Contingent Workers."
 )
 
 
@@ -73,7 +73,13 @@ def requires_staffing_model_reminder(script_name: str) -> bool:
 
 
 def requires_contingent_worker_id_reminder(script_name: str) -> bool:
-    """True for HCM10 through HCM28 scripts."""
+    """True for selected HCM01 scripts and HCM10 through HCM28."""
+    name = (script_name or "").lower()
+    if name in {
+        "hcm01_government_ids",
+        "hcm01_personal_info",
+    }:
+        return True
     number = _hcm_number(script_name)
     return number is not None and 10 <= number <= 28
 
